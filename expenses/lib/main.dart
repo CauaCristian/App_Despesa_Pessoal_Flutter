@@ -1,5 +1,4 @@
-
-import 'package:expenses/components/TransactionForm.dart';
+import 'package:appdespesaspessoais/components/TransactionForm.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'models/transaction.dart';
@@ -22,13 +21,12 @@ class AppExpenses extends StatelessWidget {
           secondary: Colors.amber,
         ),
         textTheme: theme.textTheme.copyWith(
-          headline6: const TextStyle(
-            fontFamily: "OpenSans",
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          )
-        ),
+            headline6: const TextStyle(
+          fontFamily: "OpenSans",
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        )),
         appBarTheme: const AppBarTheme(
           titleTextStyle: TextStyle(
             fontFamily: "OpenSans",
@@ -42,28 +40,24 @@ class AppExpenses extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    Transaction(id: "t1",value: 200.0,title: "conta #1",data: DateTime.now().subtract(Duration(days: 2))),
-    Transaction(id: "t2",value: 250.0,title: "conta #2",data: DateTime.now().subtract(Duration(days: 3))),
-    Transaction(id: "t3",value: 500.0,title: "conta #2",data: DateTime.now().subtract(Duration(days: 4))),
-  ];
+  final List<Transaction> _transactions = [];
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
       return tr.data.isAfter(DateTime.now().subtract(Duration(days: 7)));
     }).toList();
   }
-  _addTransaction(String title, double value){
+
+  _addTransaction(String title, double value, DateTime dataTrasaction) {
     final newTransaction = Transaction(
-    id: Random().nextDouble().toString(),
-    title: title,
-    value: value,
-    data: DateTime.now(),
+      id: Random().nextDouble().toString(),
+      title: title,
+      value: value,
+      data: dataTrasaction,
     );
     setState(() {
       _transactions.add(newTransaction);
@@ -71,17 +65,19 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
-  _remove(int index){
+  _remove(int index) {
     setState(() {
       // ignore: list_remove_unrelated_type
       _transactions.remove(index);
     });
   }
 
-  _openTransactionFormModal(BuildContext context){
-    showModalBottomSheet(context: context, builder: (_){
-      return TransactionForm(onSubmit: _addTransaction);
-    });
+  _openTransactionFormModal(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return TransactionForm(onSubmit: _addTransaction);
+        });
   }
 
   @override
@@ -90,31 +86,32 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text("Despesas Pessoais"),
         actions: [
-        IconButton(
-          onPressed: (){
-            _openTransactionFormModal(context);
-          }, 
-          icon: Icon(Icons.add))],
+          IconButton(
+              onPressed: () {
+                _openTransactionFormModal(context);
+              },
+              icon: Icon(Icons.add))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Chart(recentTransaction: _recentTransactions),
-                  TransactionList(transactions: _transactions, remove: _remove,),
-                ],
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Chart(recentTransaction: _recentTransactions),
+            TransactionList(
+              transactions: _transactions,
+              remove: _remove,
+            ),
+          ],
         ),
       ),
-      floatingActionButton: 
-        FloatingActionButton(
-                              child: Icon(Icons.add), 
-                              onPressed: (){
-                                _openTransactionFormModal(context);
-                              },
-                              
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          _openTransactionFormModal(context);
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
-
