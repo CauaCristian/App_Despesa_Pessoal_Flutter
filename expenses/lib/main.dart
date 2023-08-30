@@ -1,4 +1,4 @@
-import 'package:appdespesaspessoais/components/TransactionForm.dart';
+import 'package:expenses/components/TransactionForm.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'models/transaction.dart';
