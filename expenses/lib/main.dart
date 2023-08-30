@@ -65,10 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
-  _remove(int index) {
+  _remove(String id) {
     setState(() {
-      // ignore: list_remove_unrelated_type
-      _transactions.remove(index);
+      _transactions.removeWhere((tr) => tr.id == id);
     });
   }
 

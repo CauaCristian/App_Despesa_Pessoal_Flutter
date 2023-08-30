@@ -34,6 +34,20 @@ class Chart extends StatelessWidget {
     });
   }
 
+  double _percentage(Map<String, Object> tr, double weekTotalValue) {
+    if (tr["value"] == null) {
+      return 0.0;
+    }
+
+    double value = tr["value"] as double;
+
+    if (weekTotalValue == 0.0) {
+      return 0.0;
+    }
+
+    return value / weekTotalValue;
+  }
+
   @override
   Widget build(BuildContext context) {
     groupedTransactions;
@@ -46,11 +60,13 @@ class Chart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: groupedTransactions.map((tr) {
             return Flexible(
-                fit: FlexFit.tight,
-                child: ChartBar(
-                    label: tr["day"].toString(),
-                    value: double.parse(tr["value"].toString()),
-                    percentage: (tr["value"] as double) / _weekTotalValue));
+              fit: FlexFit.tight,
+              child: ChartBar(
+                label: tr["day"].toString(),
+                value: double.parse(tr["value"].toString()),
+                percentage: _percentage(tr, _weekTotalValue),
+              ),
+            );
           }).toList(),
         ),
       ),
